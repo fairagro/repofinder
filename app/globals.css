@@ -1,0 +1,27 @@
+/* Brand tokens kept for the few places that still use CSS variables. Theme lives in app/theme.ts. */
+:root {
+  --fairagro-primary-green: #6abf5c;
+  --fairagro-teal: #0f9884;
+  --fairagro-dark-text: #231f20;
+  --fairagro-green-5: #e1f2df;
+  --fairagro-teal-5: #cfeae6;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+:focus-visible {
+  outline: 3px solid #0072B2;
+  outline-offset: 2px;
+}
