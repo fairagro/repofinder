@@ -67,7 +67,7 @@ Requires **Node.js ≥ 20.9** (Node 22 LTS recommended) and npm.
 ### Local development
 
 ```bash
-git clone <this repository> repofinder && cd repofinder
+git clone https://github.com/fairagro/repofinder.git && cd repofinder
 npm ci
 npm run dev          # http://localhost:3000
 ```
@@ -85,7 +85,8 @@ Put a reverse proxy (nginx, Caddy, Traefik) in front of port 3000 for TLS, and k
 pm2, e.g. `pm2 start npm --name rdi-inventory -- run start`.
 
 By default the API emits **root-relative** links (`/api/...`), which are correct on any host. If you want absolute
-URLs in the web-frontend, api-docs, payloads and JSON-LD `@id`s, set `NEXT_PUBLIC_SITE_URL` **at build time**:
+URLs in the payloads and JSON-LD `@id`s, set `NEXT_PUBLIC_SITE_URL` **at build time**:
+
 
 ```bash
 NEXT_PUBLIC_SITE_URL=https://inventory.example.org npm run build
