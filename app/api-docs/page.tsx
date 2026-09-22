@@ -3,6 +3,7 @@ import { Box, Chip, Container, Divider, Link as MuiLink, Paper, Stack, Table, Ta
 import { spec } from "@/app/api/_lib/openapi";
 import { API_BASE } from "@/app/api/_lib/config";
 import ApiPlayground from "./ApiPlayground";
+import QuickStart from "./QuickStart";
 
 export const metadata: Metadata = { title: "API", description: "Documentation for the FAIRagro RDI Inventory JSON API." };
 
@@ -16,13 +17,6 @@ function Code({ children }: { children: React.ReactNode }) {
   );
 }
 
-function CodeBlock({ children }: { children: string }) {
-  return (
-    <Box component="pre" sx={{ m: 0, p: 2, overflow: "auto", fontSize: 13, lineHeight: 1.6, bgcolor: "#0f1716", color: "#dfe8e5", borderRadius: 2 }}>
-      {children}
-    </Box>
-  );
-}
 
 export default function ApiDocsPage() {
   const paths = Object.entries(spec.paths) as [string, { get: Operation }][];
@@ -39,7 +33,6 @@ export default function ApiDocsPage() {
           Postman or any code generator.
         </Typography>
         <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap", rowGap: 1 }}>
-          <Chip label={`Base URL ${API_BASE}`} sx={{ fontFamily: "var(--font-geist-mono)" }} />
           <Chip label="GET only" variant="outlined" />
           <Chip label="CORS enabled" variant="outlined" />
           <Chip label="CC0 data" variant="outlined" />
@@ -48,20 +41,7 @@ export default function ApiDocsPage() {
 
       <Paper sx={{ p: { xs: 2.5, md: 3 }, mb: 4 }}>
         <Typography variant="h6" component="h2" sx={{ mb: 1.5 }}>Quick start</Typography>
-        <Stack spacing={2}>
-          <Box>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 0.75 }}>Search repositories and sort by FAIR score</Typography>
-            <CodeBlock>{`curl "${API_BASE}/resource/repository?q=soil&sort=score&order=desc&limit=5"`}</CodeBlock>
-          </Box>
-          <Box>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 0.75 }}>One repository with its 20 criteria, pillar scores and re3data profile</Typography>
-            <CodeBlock>{`curl "${API_BASE}/resource/repository/RFId001202604272"`}</CodeBlock>
-          </Box>
-          <Box>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 0.75 }}>The whole FAIRness matrix as CSV (Python)</Typography>
-            <CodeBlock>{`import pandas as pd\ndf = pd.read_csv("${API_BASE}/fairness/csv")\ndf.groupby("findability")["id"].count()`}</CodeBlock>
-          </Box>
-        </Stack>
+        <QuickStart />
       </Paper>
 
       <Typography variant="h6" component="h2" sx={{ mb: 1.5 }}>Try it</Typography>

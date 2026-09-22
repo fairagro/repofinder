@@ -4,8 +4,8 @@
 FROM node:22-alpine AS build
 WORKDIR /app
 
-# Public origin baked into API links; override with --build-arg.
-ARG NEXT_PUBLIC_SITE_URL=https://rdi-fairness-interviews.vercel.app
+# Optional public origin for absolute API links (default: relative links); set with --build-arg.
+ARG NEXT_PUBLIC_SITE_URL=""
 ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
 ENV NEXT_TELEMETRY_DISABLED=1
 

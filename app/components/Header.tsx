@@ -5,13 +5,13 @@ import { usePathname } from "next/navigation";
 import { AppBar, Box, Button, Container, Drawer, IconButton, List, ListItemButton, ListItemText, Toolbar } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import Logo, { Wordmark } from "./Logo";
 
 const NAV = [
   { href: "/", label: "Repositories" },
   { href: "/interview", label: "Interview" },
   { href: "/downloads", label: "Downloads" },
   { href: "/api-docs", label: "API" },
-  { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -29,12 +29,9 @@ export default function Header() {
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters sx={{ gap: 2, minHeight: 64 }}>
-          <Box component={NextLink} href="/" aria-label="FAIRagro RDI Inventory home" sx={{ display: "flex", alignItems: "center", gap: 1.5, mr: "auto" }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/fairagro.png" alt="FAIRagro" style={{ height: 36, width: "auto" }} />
-            <Box component="span" sx={{ fontWeight: 700, color: "text.primary", display: { xs: "none", sm: "inline" } }}>
-              RDI Inventory
-            </Box>
+          <Box component={NextLink} href="/" aria-label="RepoFinder home" sx={{ display: "flex", alignItems: "center", gap: 1.25, mr: "auto", textDecoration: "none", "&:hover svg": { transform: "rotate(-6deg)" }, "& svg": { transition: "transform .2s ease" } }}>
+            <Logo size={34} />
+            <Wordmark size={21} />
           </Box>
 
           <Box component="nav" aria-label="Main" sx={{ display: { xs: "none", md: "flex" }, gap: 0.5 }}>

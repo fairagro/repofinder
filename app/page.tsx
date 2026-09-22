@@ -102,9 +102,6 @@ export default function HomePage() {
         <Container maxWidth="xl" sx={{ py: { xs: 4, md: 6 } }}>
           <Stack direction={{ xs: "column", md: "row" }} spacing={{ xs: 3, md: 6 }} sx={{ alignItems: { md: "flex-end" }, justifyContent: "space-between" }}>
             <Box sx={{ maxWidth: 720 }}>
-              <Typography variant="overline" sx={{ color: "primary.main", fontWeight: 700, letterSpacing: "0.12em" }}>
-                FAIRagro
-              </Typography>
               <Typography variant="h3" component="h1" sx={{ mb: 1.5 }}>
                 RDI FAIRness Inventory
               </Typography>

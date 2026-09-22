@@ -373,7 +373,7 @@ export default function DownloadsPage() {
             Contact Us
           </Typography>
           <MuiLink
-            href="mailto:a.haleem@fz-juelich.de"
+            href="mailto:lange@ipk-gatersleben.de"
             sx={{
               color: "#0f9884",
               fontWeight: "600",
@@ -382,7 +382,7 @@ export default function DownloadsPage() {
               "&:hover": { textDecoration: "underline" },
             }}
           >
-            a.haleem@fz-juelich.de
+            lange@ipk-gatersleben.de
           </MuiLink>
         </Box>
         <Typography variant="body2" sx={{ color: "#555", fontStyle: "italic" }}>

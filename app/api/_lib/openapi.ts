@@ -1,5 +1,5 @@
 // OpenAPI 3.1 description of the public API. Served at /api/openapi and rendered on /api-docs.
-import { API_BASE, SITE_URL } from "./config";
+import { API_BASE } from "./config";
 import { FAIRNESS_CRITERIA, FAIR_PILLARS } from "@/app/components/utils/fairnessConstants";
 
 const rdiIdParam = {
@@ -163,7 +163,7 @@ export const spec = {
       Score: { type: ["integer", "null"], minimum: 0, maximum: 100, description: "Percentage of answered criteria met; null when nothing was answered" },
       Links: {
         type: "object",
-        properties: { self: { type: "string" }, fairness: { type: "string" }, re3data: { type: "string" }, raw: { type: "string" }, html: { type: "string", description: `Human-readable page on ${SITE_URL}` } },
+        properties: { self: { type: "string" }, fairness: { type: "string" }, re3data: { type: "string" }, raw: { type: "string" }, html: { type: "string", description: "Human-readable page for this repository" } },
       },
       RepositorySummary: {
         type: "object",

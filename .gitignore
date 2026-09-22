@@ -11,4 +11,3 @@ tsconfig.tsbuildinfo
 .DS_Store
 *.log
 .env*.local
-.vercel

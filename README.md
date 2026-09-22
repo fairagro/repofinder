@@ -83,8 +83,8 @@ PORT=3000 npm run start
 Put a reverse proxy (nginx, Caddy, Traefik) in front of port 3000 for TLS, and keep the process alive with systemd or
 pm2, e.g. `pm2 start npm --name rdi-inventory -- run start`.
 
-Set `NEXT_PUBLIC_SITE_URL` **at build time** to the public origin (default `https://rdi-fairness-interviews.vercel.app`);
-it is baked into the absolute links and JSON-LD `@id`s the API returns:
+By default the API emits **root-relative** links (`/api/...`), which are correct on any host. If you want absolute
+URLs in the payloads and JSON-LD `@id`s, set `NEXT_PUBLIC_SITE_URL` **at build time**:
 
 ```bash
 NEXT_PUBLIC_SITE_URL=https://inventory.example.org npm run build
