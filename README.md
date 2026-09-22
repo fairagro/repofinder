@@ -67,6 +67,7 @@ Requires **Node.js ≥ 20.9** (Node 22 LTS recommended) and npm.
 ### Local development
 
 ```bash
+git clone https://github.com/fairagro/repofinder.git && cd repofinder
 npm ci
 npm run dev          # http://localhost:3000
 ```
@@ -86,9 +87,14 @@ pm2, e.g. `pm2 start npm --name rdi-inventory -- run start`.
 By default the API emits **root-relative** links (`/api/...`), which are correct on any host. If you want absolute
 URLs in the payloads and JSON-LD `@id`s, set `NEXT_PUBLIC_SITE_URL` **at build time**:
 
+
 ```bash
 NEXT_PUBLIC_SITE_URL=https://inventory.example.org npm run build
 ```
+
+## Containerisation
+
+You may use Docker, Singularity or Podman on personal demands and requirements. We ship a Dockerfile for build the container that is compatible to  Docker and Podman support
 
 ### Docker
 
@@ -96,6 +102,12 @@ NEXT_PUBLIC_SITE_URL=https://inventory.example.org npm run build
 docker build -t rdi-inventory --build-arg NEXT_PUBLIC_SITE_URL=https://inventory.example.org .
 docker run -d --name rdi-inventory -p 3000:3000 rdi-inventory
 ```
+
+### Podman
+
+```bash
+podman build -t rdi-inventory --build-arg NEXT_PUBLIC_SITE_URL=https://inventory.example.org .
+podman run -d --name rdi-inventory -p 3000:3000 rdi-inventory
 
 The image builds the app in one stage and copies only the production output into a small `node:22-alpine` runtime
 that runs as an unprivileged user. Or with Compose:
