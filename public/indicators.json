@@ -44,7 +44,7 @@
     "field": "metadataPersistence",
     "label": "Metadata Persistence",
     "icon": "StorageIcon",
-    "rdaCode": "RDA-F1-01M",
+    "rdaCode": "RDA-A2-01M",
     "pillar": "FINDABILITY",
     "description": "Is your metadata persistently available over time?",
     "definition": "Metadata persistence ensures that descriptive information about datasets remains accessible and unchanged throughout the data lifecycle."
@@ -64,27 +64,27 @@
     "field": "authenticationRequired",
     "label": "Authentication Required",
     "icon": "LockIcon",
-    "rdaCode": "RDA-A1.2-02D",
+    "rdaCode": "RDA-A1.2-01D",
     "pillar": "ACCESSIBILITY",
     "description": "Does your database require authentication for data access?",
-    "definition": "Authentication mechanisms verify user identity before granting access to data, supporting both open and restricted access scenarios."
+    "definition": "Access regime appropriate to the data: open data are retrievable without authentication, and restricted, embargoed or controlled data are reachable through an authentication and authorisation procedure (RDA-A1.2-01D). Scored conditionally: a repository is not penalised for offering open data without authentication."
   },
   {
     "key": "8",
     "field": "authenticationType",
     "label": "Authentication Type",
     "icon": "VpnKeyIcon",
-    "rdaCode": "RDA-A1-04D",
+    "rdaCode": "RDA-A1.2-01D (sub-item)",
     "pillar": "ACCESSIBILITY",
     "description": "If yes, what type of authentication is used?",
-    "definition": "Different authentication types (e.g., username/password, OAuth, certificates) provide varying levels of security and usability for data access."
+    "definition": "Where authentication is used for data access, a standard, documented mechanism is in place (e.g., OAuth, ORCID, SAML or institutional login, registered accounts, API tokens, licence keys). Not assessed for repositories without authentication for data access."
   },
   {
     "key": "9",
     "field": "metadataAlwaysAvailable",
     "label": "Metadata Always Available",
     "icon": "EventAvailableIcon",
-    "rdaCode": "RDA-A2-01M",
+    "rdaCode": "RDA-A1.1-01M",
     "pillar": "ACCESSIBILITY",
     "description": "Is metadata always accessible, even if the data is restricted?",
     "definition": "Metadata availability independent of data access allows discovery and understanding of restricted datasets, supporting transparency and informed decisions."
@@ -94,7 +94,7 @@
     "field": "dataAvailability",
     "label": "Data Availability",
     "icon": "CloudDoneIcon",
-    "rdaCode": "RDA-A1.1-01D",
+    "rdaCode": "RDA-A1-02D",
     "pillar": "ACCESSIBILITY",
     "description": "Is the actual data accessible (open or controlled access)?",
     "definition": "Data availability ensures that datasets are retrievable through documented, standardized access mechanisms supporting both open and controlled access policies."
@@ -114,7 +114,7 @@
     "field": "vocabulariesUsed",
     "label": "Vocabularies Used",
     "icon": "LibraryBooksIcon",
-    "rdaCode": "RDA-I2-02M/D",
+    "rdaCode": "RDA-I2-01M/D",
     "pillar": "INTEROPERABILITY",
     "description": "Do you enforce the use of controlled vocabularies for data submission?",
     "definition": "Controlled vocabularies and standard terminologies ensure consistent representation of concepts, improving data integration and semantic interoperability."
@@ -124,7 +124,7 @@
     "field": "qualifiedReferences",
     "label": "Qualified References",
     "icon": "LinkIcon",
-    "rdaCode": "RDA-I3-03M/D",
+    "rdaCode": "RDA-I3-03M, RDA-I3-02D",
     "pillar": "INTEROPERABILITY",
     "description": "Do you validate and qualify references (e.g., external IDs) before data submission?",
     "definition": "Qualified references with resolvable identifiers enable linking between datasets and external resources, enhancing data connectivity and context."
@@ -144,7 +144,7 @@
     "field": "dataFormats",
     "label": "Data Formats",
     "icon": "InsertDriveFileIcon",
-    "rdaCode": "RDA-I1-01M",
+    "rdaCode": "RDA-I1-01D/M",
     "pillar": "INTEROPERABILITY",
     "description": "Do you use standardized data formats in your database or API?",
     "definition": "Standardized, non-proprietary data formats ensure data portability and compatibility across different tools and systems."

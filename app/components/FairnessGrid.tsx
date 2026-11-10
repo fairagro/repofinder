@@ -3,9 +3,11 @@ import Link from "next/link";
 import { FAIRNESS_CRITERIA, FAIR_PILLARS, STATUS_COLORS, STATUS_LABELS, pillarColor } from "./utils/fairnessConstants";
 import { criteriaResults } from "./utils/fairnessScore";
 import { getIconComponent } from "./utils/iconMap";
-import { statusOf } from "./StatusGlyph";
 
-/** 20 criteria grouped by pillar; each criterion icon is tinted with its status color (label + tooltip carry the text). */
+/**
+ * 20 criteria grouped by pillar; each criterion icon is tinted with its status color (label + tooltip carry
+ * the text). A "not applicable" criterion gets a dashed border so it is told apart from "not assessed".
+ */
 export default function FairnessGrid({ fairnessData }: { fairnessData: any }) {
   const results = criteriaResults(fairnessData);
 
@@ -24,7 +26,7 @@ export default function FairnessGrid({ fairnessData }: { fairnessData: any }) {
             </Typography>
             <Box sx={{ display: "flex", gap: 0.5 }}>
               {items.map((r) => {
-                const status = statusOf(r.met);
+                const status = r.answer;
                 const Icon = getIconComponent(FAIRNESS_CRITERIA.find((c) => c.key === r.key)?.icon || "HelpIcon");
                 return (
                   <Tooltip key={r.key} title={`${r.key}. ${r.label} — ${STATUS_LABELS[status]}`}>
@@ -41,8 +43,8 @@ export default function FairnessGrid({ fairnessData }: { fairnessData: any }) {
                         borderRadius: 2,
                         color: STATUS_COLORS[status],
                         bgcolor: "background.default",
-                        border: "1px solid",
-                        borderColor: "divider",
+                        border: status === "not applicable" ? "1px dashed" : "1px solid",
+                        borderColor: status === "not applicable" ? STATUS_COLORS[status] : "divider",
                         transition: "transform .15s ease, border-color .15s ease",
                         "&:hover, &:focus-visible": { transform: "translateY(-2px)", borderColor: STATUS_COLORS[status] },
                       }}

@@ -27,7 +27,8 @@ export const spec = {
     version: "1.0.0",
     description:
       "Read-only API over FAIRness assessments of research data infrastructures (RDIs) collected in FAIRagro RDI manager interviews. " +
-      "All endpoints are GET, return JSON (except /fairness/csv) and allow cross-origin requests.",
+      "All endpoints are GET, return JSON (except /fairness/csv) and allow cross-origin requests. " +
+      "Results are reported per FAIR pillar (metrics met / metrics assessed) and per criterion; no composite FAIR score is computed and repositories are not ranked.",
     contact: { name: "FAIRagro", url: "https://fairagro.net/" },
     license: { name: "CC0 1.0", url: "http://creativecommons.org/publicdomain/zero/1.0/" },
   },
@@ -54,8 +55,7 @@ export const spec = {
           { name: "q", in: "query", description: "Free-text search over id, title, description, subjects, collections and URL", schema: { type: "string" } },
           { name: "subject", in: "query", description: "Filter by subject (repeatable or comma-separated; any match)", schema: { type: "array", items: { type: "string" } }, style: "form", explode: true },
           { name: "collection", in: "query", description: "Filter by FAIRagro collection (repeatable or comma-separated; any match)", schema: { type: "array", items: { type: "string" } }, style: "form", explode: true },
-          { name: "minScore", in: "query", description: "Only repositories with an overall FAIRness score ≥ this value", schema: { type: "number", minimum: 0, maximum: 100 } },
-          { name: "sort", in: "query", schema: { type: "string", enum: ["id", "title", "score"], default: "id" } },
+          { name: "sort", in: "query", schema: { type: "string", enum: ["id", "title"], default: "id" } },
           { name: "order", in: "query", schema: { type: "string", enum: ["asc", "desc"], default: "asc" } },
           { name: "page", in: "query", schema: { type: "integer", minimum: 1, default: 1 } },
           { name: "limit", in: "query", schema: { type: "integer", minimum: 1, maximum: 100, default: 20 } },
@@ -108,7 +108,7 @@ export const spec = {
       get: {
         tags: ["FAIRness"],
         summary: "FAIRness matrix",
-        description: "One row per repository: overall and pillar scores plus a yes/no/unknown answer per criterion.",
+        description: "One row per repository: overall and pillar scores plus a met / not met / not applicable / unknown cell per criterion.",
         operationId: "fairnessMatrix",
         responses: { "200": okJson("FairnessMatrix") },
       },
@@ -125,7 +125,7 @@ export const spec = {
       get: {
         tags: ["FAIRness"],
         summary: "Aggregate statistics",
-        description: "Average overall and pillar scores, per-criterion met rates, and a ranking of repositories by score.",
+        description: "Average pillar scores and per-criterion met rates across the landscape. No overall score and no ranking are computed: the methodology reports pillar-level results only.",
         operationId: "fairnessStats",
         responses: { "200": okJson("FairnessStats") },
       },
@@ -158,7 +158,11 @@ export const spec = {
         type: "object",
         properties: { error: { type: "object", properties: { status: { type: "integer" }, title: { type: "string" }, detail: { type: "string" } } } },
       },
-      Answer: { type: "string", enum: ["yes", "no", "unknown"] },
+      Answer: {
+        type: "string",
+        enum: ["yes", "no", "not applicable", "unknown"],
+        description: "yes / no = compliance / non-compliance with evidence; not applicable = conditional criterion that does not apply to this repository; unknown = not assessed. The last two are excluded from every score denominator.",
+      },
       Pillar: { type: "string", enum: [...FAIR_PILLARS] },
       Score: { type: ["integer", "null"], minimum: 0, maximum: 100, description: "Percentage of answered criteria met; null when nothing was answered" },
       Links: {
@@ -177,8 +181,8 @@ export const spec = {
           datasetsSearchCollectionId: { type: ["string", "null"], description: "Collection id in the FAIRagro datasets search hub" },
           fairness: {
             type: "object",
+            description: "Pillar scores only; no composite FAIR score is computed",
             properties: {
-              score: { $ref: "#/components/schemas/Score" },
               pillars: { type: "object", additionalProperties: { $ref: "#/components/schemas/Score" } },
             },
           },
@@ -199,7 +203,7 @@ export const spec = {
       },
       PillarScore: {
         type: "object",
-        properties: { score: { $ref: "#/components/schemas/Score" }, met: { type: "integer" }, answered: { type: "integer" }, total: { type: "integer" } },
+        properties: { score: { $ref: "#/components/schemas/Score" }, met: { type: "integer" }, answered: { type: "integer", description: "Criteria assessed (yes or no)" }, notApplicable: { type: "integer" }, total: { type: "integer" } },
       },
       RepositoryDetail: {
         allOf: [
@@ -221,11 +225,9 @@ export const spec = {
               fairness: {
                 type: "object",
                 properties: {
-                  score: { $ref: "#/components/schemas/Score" },
                   pillars: { type: "object", additionalProperties: { $ref: "#/components/schemas/PillarScore" } },
                   assessmentDate: { type: ["string", "null"] },
                   assessmentMethod: { type: ["string", "null"] },
-                  overallFAIRScore: { type: ["string", "null"] },
                   criteria: { type: "array", items: { $ref: "#/components/schemas/CriterionResult" } },
                 },
               },
@@ -266,7 +268,7 @@ export const spec = {
           meta: { type: "object", properties: { total: { type: "integer" }, columns: { type: "array", items: { type: "string" } } } },
           data: {
             type: "array",
-            items: { type: "object", description: "id, title, score, one score per pillar, then one Answer per criterion field", additionalProperties: true },
+            items: { type: "object", description: "id, title, one score per pillar, then one Answer per criterion field", additionalProperties: true },
           },
         },
       },
@@ -274,16 +276,14 @@ export const spec = {
         type: "object",
         properties: {
           repositories: { type: "integer" },
-          averageScore: { $ref: "#/components/schemas/Score" },
           pillars: { type: "object", additionalProperties: { type: "object", properties: { averageScore: { $ref: "#/components/schemas/Score" } } } },
           criteria: {
             type: "array",
             items: {
               type: "object",
-              properties: { key: { type: "string" }, field: { type: "string" }, label: { type: "string" }, pillar: { type: "string" }, rdaCode: { type: "string" }, yes: { type: "integer" }, no: { type: "integer" }, unknown: { type: "integer" }, metRate: { $ref: "#/components/schemas/Score" } },
+              properties: { key: { type: "string" }, field: { type: "string" }, label: { type: "string" }, pillar: { type: "string" }, rdaCode: { type: "string" }, met: { type: "integer" }, notMet: { type: "integer" }, notApplicable: { type: "integer" }, unknown: { type: "integer", description: "Not assessed" }, metRate: { $ref: "#/components/schemas/Score" } },
             },
           },
-          ranking: { type: "array", items: { type: "object", properties: { id: { type: "string" }, title: { type: "string" }, score: { type: "integer" } } } },
         },
       },
       Facets: {

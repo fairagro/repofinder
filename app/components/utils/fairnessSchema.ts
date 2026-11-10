@@ -15,7 +15,11 @@ export function getFairnessSchemaBlock(): any {
   }
 }
 
-/** Normalizes a raw answer to a boolean, number or null according to its schema type. */
+/**
+ * Normalizes a raw answer to a boolean, number or null according to its schema type.
+ * The literal "not applicable" (a conditional criterion that does not apply) is passed through
+ * so that consumers can tell it apart from null (= not assessed).
+ */
 function toTypedValue(rawValue: any, type: string): boolean | number | string | null {
   if (rawValue === undefined || rawValue === null || rawValue === "") return null;
 
@@ -23,6 +27,7 @@ function toTypedValue(rawValue: any, type: string): boolean | number | string | 
     const cleanStr = String(rawValue).trim().toLowerCase();
     if (cleanStr === "yes" || cleanStr === "true") return true;
     if (cleanStr === "no" || cleanStr === "false") return false;
+    if (cleanStr === "not applicable") return "not applicable";
     return null; // 'missing', 'none', 'unknown' and any unexpected placeholder
   }
 

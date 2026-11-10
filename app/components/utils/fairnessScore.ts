@@ -1,9 +1,9 @@
 // Pure FAIRness scoring over the raw `FAIRness` compound of an rf-rdis record.
 // Used by the cards, the detail pages and the JSON API so every surface agrees.
 import { FAIRNESS_CRITERIA, FAIR_PILLARS, type FairPillar } from "./fairnessConstants";
-import { normalizeFairnessValue } from "./fairnessUtils";
+import { normalizeFairnessValue, type FairnessAnswer } from "./fairnessUtils";
 
-export type Answer = "yes" | "no" | "unknown";
+export type Answer = FairnessAnswer;
 
 export interface CriterionResult {
   key: string;
@@ -13,25 +13,29 @@ export interface CriterionResult {
   pillar: string;
   /** The interview answer as recorded. */
   answer: Answer;
-  /** 1 = compliance / 0 = non-compliance as in the methodology paper; null when not assessed. */
+  /** 1 = compliance / 0 = non-compliance as in the methodology paper; null when not assessed or not applicable. */
   met: boolean | null;
   rawValue: unknown;
 }
 
 export interface PillarScore {
-  /** Percentage of answered criteria that are met, 0-100 (null when nothing was answered). */
+  /** Percentage of assessed criteria that are met, 0-100 (null when nothing was assessed). */
   score: number | null;
   met: number;
+  /** Criteria with evidence (yes or no); "not applicable" and "unknown" are excluded. */
   answered: number;
+  notApplicable: number;
   total: number;
 }
 
+/**
+ * Pillar-level results only. No composite score across the four pillars is computed anywhere
+ * (methodology paper, Methods "Metric Definition & Weighting"); prioritisation is left to the client.
+ */
 export interface FairnessSummary {
-  score: number | null;
   pillars: Record<FairPillar, PillarScore>;
   assessmentDate: string | null;
   assessmentMethod: string | null;
-  overallFAIRScore: string | null;
 }
 
 /** Flattens the compound into { fieldName: rawAnswer }. */
@@ -58,7 +62,7 @@ export function criteriaResults(rawFairness: any): CriterionResult[] {
       rdaCode: crit.rdaCode,
       pillar: crit.pillar,
       answer,
-      met: answer === "unknown" ? null : answer === "yes",
+      met: answer === "yes" ? true : answer === "no" ? false : null,
       rawValue: byField[crit.field] ?? null,
     };
   });
@@ -67,10 +71,12 @@ export function criteriaResults(rawFairness: any): CriterionResult[] {
 export function scoreResults(results: CriterionResult[]): PillarScore {
   const answered = results.filter((r) => r.met !== null).length;
   const met = results.filter((r) => r.met === true).length;
+  const notApplicable = results.filter((r) => r.answer === "not applicable").length;
   return {
     score: answered > 0 ? Math.round((met / answered) * 100) : null,
     met,
     answered,
+    notApplicable,
     total: results.length,
   };
 }
@@ -85,10 +91,8 @@ export function fairnessSummary(rawFairness: any): FairnessSummary {
     return typeof v === "string" && v.trim() !== "" ? v : null;
   };
   return {
-    score: scoreResults(results).score,
     pillars,
     assessmentDate: str("assessmentDate"),
     assessmentMethod: str("assessmentMethod"),
-    overallFAIRScore: str("overallFAIRScore"),
   };
 }

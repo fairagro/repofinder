@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 import { API_BASE, badRequest, json, serverError } from "@/app/api/_lib/http";
 import { paginate, searchRdis, serializeSummary, type ListQuery } from "@/app/api/_lib/rdi";
 
-const SORTS = ["id", "title", "score"] as const;
+const SORTS = ["id", "title"] as const;
 const ORDERS = ["asc", "desc"] as const;
 
 function parseQuery(params: URLSearchParams): ListQuery | string {
@@ -16,12 +16,6 @@ function parseQuery(params: URLSearchParams): ListQuery | string {
   const order = params.get("order") || "asc";
   if (!(ORDERS as readonly string[]).includes(order)) return `\`order\` must be one of ${ORDERS.join(", ")}`;
 
-  let minScore: number | undefined;
-  if (params.has("minScore")) {
-    minScore = Number(params.get("minScore"));
-    if (Number.isNaN(minScore) || minScore < 0 || minScore > 100) return "`minScore` must be a number between 0 and 100";
-  }
-
   // Repeatable (?subject=a&subject=b) and comma-separated (?subject=a,b) are both accepted.
   const multi = (key: string) =>
     params
@@ -34,7 +28,6 @@ function parseQuery(params: URLSearchParams): ListQuery | string {
     q: params.get("q") || undefined,
     subject: multi("subject"),
     collection: multi("collection"),
-    minScore,
     sort: sort as ListQuery["sort"],
     order: order as ListQuery["order"],
     page,

@@ -20,18 +20,21 @@ export const FAIR_PILLARS = ["findability", "accessibility", "interoperability",
 export type FairPillar = (typeof FAIR_PILLARS)[number];
 
 // Traffic-light semantics as described in the FAIRagro methodology paper (green = compliant,
-// red = non-compliant, grey = unknown), using the Okabe-Ito green/vermillion pair, which stays
-// distinguishable under deuteranopia/protanopia. Every status is also paired with a glyph
-// (check / cross / question mark) so no information is carried by hue alone.
+// red = non-compliant, grey = not assessed or not applicable), using the Okabe-Ito
+// green/vermillion pair, which stays distinguishable under deuteranopia/protanopia. Every status
+// is also paired with a glyph (check / cross / dash / question mark) so no information is carried
+// by hue alone; "not applicable" is additionally drawn outlined instead of filled.
 export const STATUS_COLORS = {
   yes: "#009E73", // bluish green
   no: "#D55E00", // vermillion
+  "not applicable": "#8C8C8C", // neutral grey, outlined
   unknown: "#8C8C8C", // neutral grey
 } as const;
 
 export const STATUS_LABELS = {
   yes: "Criterion met",
   no: "Criterion not met",
+  "not applicable": "Not applicable",
   unknown: "Not assessed",
 } as const;
 

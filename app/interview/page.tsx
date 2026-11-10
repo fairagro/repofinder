@@ -147,6 +147,7 @@ export default function InterviewPage() {
                       fontFamily: "monospace",
                       color: "#555",
                       fontSize: "0.875rem",
+                      whiteSpace: "nowrap",
                     }}
                   >
                     {criterion.rdaCode}

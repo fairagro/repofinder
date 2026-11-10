@@ -21,7 +21,7 @@ If you use the data or the API, please cite the paper.
 
 | Route | Purpose |
 |---|---|
-| `/` | Searchable, filterable inventory; every card shows the 20-criterion diagnostic grid (green = met, red = not met, grey = not assessed) |
+| `/` | Searchable, filterable inventory; every card shows the 20-criterion diagnostic grid (green = met, red = not met, grey = not assessed, grey outlined = not applicable) |
 | `/resource/repository/{RFId}` | Repository profile: metadata, re3data record, per-pillar ratings, full criteria table |
 | `/resource/repository/{RFId}/fairness` | Pillar bar chart + detailed assessment |
 | `/interview`, `/indicator/{1–20}` | The questionnaire and the definition of each criterion |

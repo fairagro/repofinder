@@ -113,9 +113,10 @@ export default function IndicatorClient({ indicator }: IndicatorClientProps) {
               <strong>{indicator.rdaCode}</strong>
             </Typography>
             <Typography variant="caption" sx={{ color: '#999', mt: 1, display: 'block' }}>
-              {indicator.rdaCode.includes('M') && 'M = Mandatory'}
-              {indicator.rdaCode.includes('D') && (indicator.rdaCode.includes('M') ? ' | ' : '')}
-              {indicator.rdaCode.includes('D') && 'D = Dataset-level'}
+              {/* RDA FAIR Data Maturity Model suffixes: M = indicator about metadata, D = indicator about data */}
+              {/M\b/.test(indicator.rdaCode) && 'M = metadata-level indicator'}
+              {/D\b/.test(indicator.rdaCode) && (/M\b/.test(indicator.rdaCode) ? ' | ' : '')}
+              {/D\b/.test(indicator.rdaCode) && 'D = data-level indicator'}
             </Typography>
           </Box>
         )}

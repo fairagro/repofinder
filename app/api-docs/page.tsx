@@ -46,7 +46,7 @@ export default function ApiDocsPage() {
 
       <Typography variant="h6" component="h2" sx={{ mb: 1.5 }}>Try it</Typography>
       <Box sx={{ mb: 4 }}>
-        <ApiPlayground initialPath="/api/resource/repository?limit=3&sort=score&order=desc" />
+        <ApiPlayground initialPath="/api/resource/repository?limit=3&sort=title" />
       </Box>
 
       <Typography variant="h6" component="h2" sx={{ mb: 1.5 }}>Endpoints</Typography>
@@ -100,7 +100,7 @@ export default function ApiDocsPage() {
       <Divider sx={{ my: 4 }} />
       <Typography variant="h6" component="h2" sx={{ mb: 1.5 }}>Conventions</Typography>
       <Stack spacing={1.5} sx={{ maxWidth: 800 }}>
-        <Typography variant="body2"><strong>Scores.</strong> Following the FAIRagro methodology, each criterion is a binary attribute (1 = compliance, 0 = non-compliance). A pillar score is the percentage of <em>answered</em> criteria in that pillar that are met (0–100, i.e. 4 of 5 = 80); <Code>null</Code> means nothing was answered. The API also returns an overall percentage for convenience, but the methodology deliberately avoids a single composite FAIR index — prefer the four pillar scores. Each criterion carries the recorded <Code>answer</Code> (yes / no / unknown) and the derived <Code>met</Code> flag.</Typography>
+        <Typography variant="body2"><strong>Scores.</strong> Following the FAIRagro methodology, each criterion is a binary attribute (1 = compliance, 0 = non-compliance). A pillar score is the percentage of <em>answered</em> criteria in that pillar that are met (0–100, i.e. 4 of 5 = 80); <Code>null</Code> means nothing was answered. No composite FAIR score is computed or returned, and repositories are never ranked: the methodology deliberately avoids a single index, so work with the four pillar scores and the per-criterion answers. Each criterion carries the recorded <Code>answer</Code> (yes / no / not applicable / unknown) and the derived <Code>met</Code> flag. <em>Not applicable</em> marks a conditional criterion that does not apply to the repository (for example authentication type for a repository that uses no authentication for data access); like <em>unknown</em> (not assessed) it is excluded from the denominator.</Typography>
         <Typography variant="body2"><strong>Pagination.</strong> List responses have <Code>meta</Code> (<Code>total</Code>, <Code>page</Code>, <Code>limit</Code>, <Code>totalPages</Code>) and <Code>links</Code> (<Code>self</Code>, <Code>first</Code>, <Code>prev</Code>, <Code>next</Code>, <Code>last</Code>). <Code>limit</Code> is capped at 100.</Typography>
         <Typography variant="body2"><strong>Errors.</strong> Non-2xx responses return <Code>{`{ "error": { "status", "title", "detail" } }`}</Code>. Invalid query parameters give 400, unknown identifiers 404.</Typography>
         <Typography variant="body2"><strong>Caching.</strong> Everything except the search endpoint is pre-rendered at deploy time; responses carry <Code>Cache-Control</Code> headers and are safe to cache. Data changes only when the underlying <Code>rf-rdis</Code> package is updated and the site is redeployed.</Typography>

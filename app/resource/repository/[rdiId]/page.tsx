@@ -79,15 +79,15 @@ export default async function RdiDetailsPage({ params }: PageProps) {
             )}
           </Box>
           <Box>
-            <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 0.75 }}>Criteria met per FAIR pillar</Typography>
+            <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 0.75 }}>Criteria met / assessed per FAIR pillar</Typography>
             <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.75, maxWidth: 300 }}>
               {FAIR_PILLARS.map((p) => {
-                const { met, total } = summary.pillars[p];
+                const { met, answered } = summary.pillars[p];
                 return (
                   <Chip
                     key={p}
                     size="small"
-                    label={`${p.charAt(0).toUpperCase() + p.slice(1)} ${met}/${total}`}
+                    label={`${p.charAt(0).toUpperCase() + p.slice(1)} ${answered > 0 ? `${met}/${answered}` : "not assessed"}`}
                     sx={{ bgcolor: pillarBgColor(p), color: "text.primary", borderLeft: "4px solid", borderLeftColor: pillarColor(p), borderRadius: 1 }}
                   />
                 );

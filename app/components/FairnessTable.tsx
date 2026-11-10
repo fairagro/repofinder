@@ -11,6 +11,7 @@ interface FairnessTableProps {
 const RESERVED_KEYS = ["description", "display_name", "title", "type"];
 
 function statusFor(val: unknown): Status {
+  if (val === "not applicable") return "not applicable";
   if (val === null || val === undefined || val === "na" || val === "") return "unknown";
   return val === true || val === "yes" ? "yes" : "no";
 }

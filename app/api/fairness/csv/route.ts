@@ -12,7 +12,7 @@ function cell(value: unknown): string {
 
 export function GET() {
   try {
-    const columns = ["id", "title", "score", ...FAIR_PILLARS, ...FAIRNESS_CRITERIA.map((c) => c.field)];
+    const columns = ["id", "title", ...FAIR_PILLARS, ...FAIRNESS_CRITERIA.map((c) => c.field)];
     const lines = [columns.join(","), ...fairnessMatrix().map((row) => columns.map((c) => cell(row[c])).join(","))];
     return text(lines.join("\r\n") + "\r\n", "text/csv; charset=utf-8", {
       headers: { "Content-Disposition": 'inline; filename="fairagro-rdi-fairness.csv"' },

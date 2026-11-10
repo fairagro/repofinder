@@ -76,7 +76,9 @@
       "title": "re3data.org metadata",
       "additional_information": "",
       "placeholder": "",
-      "required": ["orgIdentifier"],
+      "required": [
+        "orgIdentifier"
+      ],
       "properties": {
         "orgIdentifier": {
           "title": "orgIdentifier",
@@ -841,17 +843,28 @@
                       "level": {
                         "type": "string",
                         "description": "Implementation level",
-                        "enum": ["Full", "Partial", "Basic"]
+                        "enum": [
+                          "Full",
+                          "Partial",
+                          "Basic"
+                        ]
                       }
                     },
-                    "required": ["standard"]
+                    "required": [
+                      "standard"
+                    ]
                   }
                 },
                 "interoperabilityLevel": {
                   "type": "string",
                   "description": "Overall interoperability capability",
                   "display_name": "Interoperability Level",
-                  "enum": ["Basic", "Intermediate", "Advanced", "Full"]
+                  "enum": [
+                    "Basic",
+                    "Intermediate",
+                    "Advanced",
+                    "Full"
+                  ]
                 }
               }
             },
@@ -905,7 +918,14 @@
                   "display_name": "Persistent Identifiers",
                   "items": {
                     "type": "string",
-                    "enum": ["DOI", "Handle", "ARK", "PURL", "URN", "Other"]
+                    "enum": [
+                      "DOI",
+                      "Handle",
+                      "ARK",
+                      "PURL",
+                      "URN",
+                      "Other"
+                    ]
                   }
                 }
               }
@@ -920,7 +940,12 @@
                   "type": "string",
                   "description": "License of the repository software",
                   "display_name": "Software License",
-                  "enum": ["Open Source", "Proprietary", "Mixed", "Unknown"]
+                  "enum": [
+                    "Open Source",
+                    "Proprietary",
+                    "Mixed",
+                    "Unknown"
+                  ]
                 },
                 "sustainabilityPlan": {
                   "type": "string",
@@ -1021,7 +1046,7 @@
                 "metadataPersistence": {
                   "title": "Metadata Persistence",
                   "type": "boolean",
-                  "description": "Metadata persistence ensures that descriptive information about datasets remains accessible and unchanged throughout the data lifecycle. (RDA-F1-01M)",
+                  "description": "Metadata persistence ensures that descriptive information about datasets remains accessible and unchanged throughout the data lifecycle. (RDA-A2-01M)",
                   "display_name": "Metadata Persistence",
                   "ui_control": "switch",
                   "placeholder": "Toggle to confirm metadata preservation guarantee...",
@@ -1048,25 +1073,25 @@
                 "authenticationRequired": {
                   "title": "Authentication Required",
                   "type": "boolean",
-                  "description": "Authentication mechanisms verify user identity before granting access to data, supporting both open and restricted access scenarios. (RDA-A1.2-02D)",
+                  "description": "Access regime appropriate to the data: open data are retrievable without authentication, and restricted, embargoed or controlled data are reachable through an authentication and authorisation procedure. Scored conditionally; a repository is not penalised for offering open data without authentication. (RDA-A1.2-01D)",
                   "display_name": "Authentication Required",
                   "ui_control": "switch",
                   "placeholder": "Is access identity gating currently operational?",
-                  "additional_information": "Checking this true indicates authorization checking is required prior to resource extraction."
+                  "additional_information": "True = open data need no authentication and any protected data have an authentication/authorisation procedure; False = authentication demanded for open data, or protected data without a procedure."
                 },
                 "authenticationType": {
                   "title": "Authentication Type",
                   "type": "boolean",
-                  "description": "Different authentication types (e.g., username/password, OAuth, certificates) provide varying levels of security and usability for data access. (RDA-A1-04D)",
+                  "description": "Where authentication is used for data access, a standard, documented mechanism is in place (e.g., OAuth, ORCID, SAML or institutional login, registered accounts, API tokens, licence keys). Not assessed for repositories without authentication for data access. (RDA-A1.2-01D, sub-item)",
                   "display_name": "Authentication Type",
                   "ui_control": "switch",
                   "placeholder": "Toggle to confirm standardized identity verification...",
-                  "additional_information": "Open references indicate public extraction, while standardized implies OAuth2, Shibboleth, or API Tokens."
+                  "additional_information": "Assessed only where authentication is used for data access. True = a named standard mechanism (OAuth2, ORCID, Shibboleth/SAML, institutional login, API tokens, licence keys); null = not applicable (no authentication for data access)."
                 },
                 "metadataAlwaysAvailable": {
                   "title": "Metadata Always Available",
                   "type": "boolean",
-                  "description": "Metadata availability independent of data access allows discovery and understanding of restricted datasets, supporting transparency and informed decisions. (RDA-A2-01M)",
+                  "description": "Metadata availability independent of data access allows discovery and understanding of restricted datasets, supporting transparency and informed decisions. (RDA-A1.1-01M)",
                   "display_name": "Metadata Always Available",
                   "ui_control": "switch",
                   "placeholder": "Is record index persistently readable if payload is secure?",
@@ -1075,7 +1100,7 @@
                 "dataAvailability": {
                   "title": "Data Availability",
                   "type": "boolean",
-                  "description": "Data availability ensures that datasets are retrievable through documented, standardized access mechanisms supporting both open and controlled access policies. (RDA-A1.1-01D)",
+                  "description": "Data availability ensures that datasets are retrievable through documented, standardized access mechanisms supporting both open and controlled access policies. (RDA-A1-02D)",
                   "display_name": "Data Availability",
                   "ui_control": "switch",
                   "placeholder": "Toggle to confirm functional up-time expectations...",
@@ -1102,7 +1127,7 @@
                 "vocabulariesUsed": {
                   "title": "Vocabularies Used",
                   "type": "boolean",
-                  "description": "Controlled vocabularies and standard terminologies ensure consistent representation of concepts, improving data integration and semantic interoperability. (RDA-I2-02M/D)",
+                  "description": "Controlled vocabularies and standard terminologies ensure consistent representation of concepts, improving data integration and semantic interoperability. (RDA-I2-01M/D)",
                   "display_name": "Vocabularies Used",
                   "ui_control": "switch",
                   "placeholder": "Toggle to confirm controlled vocabulary usage...",
@@ -1111,7 +1136,7 @@
                 "qualifiedReferences": {
                   "title": "Qualified References",
                   "type": "boolean",
-                  "description": "Qualified references with resolvable identifiers enable linking between datasets and external resources, enhancing data connectivity and context. (RDA-I3-03M/D)",
+                  "description": "Qualified references with resolvable identifiers enable linking between datasets and external resources, enhancing data connectivity and context. (RDA-I3-03M, RDA-I3-02D)",
                   "display_name": "Qualified References",
                   "ui_control": "switch",
                   "placeholder": "Toggle if dataset points explicitly to external semantic relations...",
@@ -1120,7 +1145,7 @@
                 "dataFormats": {
                   "title": "Data Formats",
                   "type": "boolean",
-                  "description": "Standardized, non-proprietary data formats ensure data portability and compatibility across different tools and systems. (RDA-I1-01M)",
+                  "description": "Standardized, non-proprietary data formats ensure data portability and compatibility across different tools and systems. (RDA-I1-01D/M)",
                   "display_name": "Data Formats",
                   "ui_control": "switch",
                   "placeholder": "Toggle to confirm open structural schema formats...",
@@ -1216,17 +1241,6 @@
                 "Expert Evaluation",
                 "Mixed Methods"
               ]
-            },
-            "overallFAIRScore": {
-              "title": "Overall FAIR Score",
-              "type": "number",
-              "minimum": 0,
-              "maximum": 100,
-              "description": "Overall FAIRness score (0-100)",
-              "display_name": "Overall Fair Score",
-              "ui_control": "gauge_display",
-              "placeholder": "0 - 100%",
-              "additional_information": "Calculated value weighting individual categories uniformly based on relative evaluation response flags."
             }
           }
         },
@@ -1286,7 +1300,13 @@
               "type": "string",
               "description": "Geographic scope of the data",
               "display_name": "Geographic Coverage",
-              "enum": ["Local", "Regional", "National", "Continental", "Global"]
+              "enum": [
+                "Local",
+                "Regional",
+                "National",
+                "Continental",
+                "Global"
+              ]
             },
             "temporalCoverage": {
               "type": "object",
@@ -1322,5 +1342,7 @@
     }
   },
   "additionalProperties": false,
-  "required": ["re3Data"]
+  "required": [
+    "re3Data"
+  ]
 }

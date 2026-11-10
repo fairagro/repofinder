@@ -40,6 +40,7 @@
   ],
   "exclude": [
     "node_modules",
-    "rf-rdis"
+    "rf-rdis",
+    "resources"
   ]
 }

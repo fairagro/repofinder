@@ -11,7 +11,7 @@ export function GET() {
     documentation: `${SITE_URL}/api-docs`,
     openapi: `${API_BASE}/openapi`,
     endpoints: {
-      repositories: `${API_BASE}/resource/repository?q=&subject=&collection=&minScore=&sort=&order=&page=&limit=`,
+      repositories: `${API_BASE}/resource/repository?q=&subject=&collection=&sort=&order=&page=&limit=`,
       repository: `${API_BASE}/resource/repository/{rdiId}`,
       repositoryFairness: `${API_BASE}/resource/repository/{rdiId}/fairness`,
       repositoryRe3data: `${API_BASE}/resource/repository/{rdiId}/re3data`,

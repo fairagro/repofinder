@@ -102,7 +102,6 @@ export function serializeSummary(rdi: Rdi) {
     collections: extractCollections(rdi.raw),
     datasetsSearchCollectionId: extractDatasetSearchId(rdi.raw) || null,
     fairness: {
-      score: summary.score,
       pillars: Object.fromEntries(
         Object.entries(summary.pillars).map(([k, v]) => [k, v.score]),
       ),
@@ -170,7 +169,8 @@ export function fairnessStats(rdis: Rdi[] = allRdis()) {
     const results = perRdi.map((r) => r.results.find((c) => c.key === crit.key)!);
     const met = results.filter((c) => c.met === true).length;
     const notMet = results.filter((c) => c.met === false).length;
-    const unknown = results.length - met - notMet;
+    const notApplicable = results.filter((c) => c.answer === "not applicable").length;
+    const unknown = results.length - met - notMet - notApplicable; // not assessed
     return {
       key: crit.key,
       field: crit.field,
@@ -179,6 +179,7 @@ export function fairnessStats(rdis: Rdi[] = allRdis()) {
       rdaCode: crit.rdaCode,
       met,
       notMet,
+      notApplicable,
       unknown,
       metRate: met + notMet > 0 ? Math.round((met / (met + notMet)) * 100) : null,
     };
@@ -193,17 +194,12 @@ export function fairnessStats(rdis: Rdi[] = allRdis()) {
     FAIR_PILLARS.map((p) => [p, { averageScore: avg(perRdi.map((r) => r.summary.pillars[p].score)) }]),
   );
 
-  const ranked = perRdi
-    .map((r) => ({ id: r.rdi.id as string, title: extractRdiDisplayData(r.rdi).title, score: r.summary.score }))
-    .filter((r) => r.score !== null)
-    .sort((a, b) => (b.score as number) - (a.score as number));
-
+  // Deliberately no overall average and no ranking: the methodology reports pillar-level
+  // results only and leaves any prioritisation to the client.
   return {
     repositories: rdis.length,
-    averageScore: avg(perRdi.map((r) => r.summary.score)),
     pillars,
     criteria,
-    ranking: ranked,
   };
 }
 
@@ -214,10 +210,11 @@ export function fairnessMatrix(rdis: Rdi[] = allRdis()) {
     const row: Record<string, unknown> = {
       id: rdi.id,
       title: extractRdiDisplayData(rdi).title,
-      score: summary.score,
     };
     for (const p of FAIR_PILLARS) row[p] = summary.pillars[p].score;
-    for (const c of criteriaResults(rdi)) row[c.field] = c.met === null ? "unknown" : c.met ? "met" : "not met";
+    for (const c of criteriaResults(rdi)) {
+      row[c.field] = c.answer === "not applicable" ? "not applicable" : c.met === null ? "unknown" : c.met ? "met" : "not met";
+    }
     return row;
   });
 }
@@ -229,8 +226,7 @@ export interface ListQuery {
   q?: string;
   subject?: string[];
   collection?: string[];
-  minScore?: number;
-  sort?: "id" | "title" | "score";
+  sort?: "id" | "title";
   order?: "asc" | "desc";
   page: number;
   limit: number;
@@ -247,10 +243,6 @@ export function searchRdis(query: ListQuery, rdis: Rdi[] = allRdis()): Rdi[] {
       const c = extractCollections(rdi.raw);
       if (!query.collection.some((v) => c.includes(v))) return false;
     }
-    if (query.minScore !== undefined) {
-      const score = fairnessSummary(rdi).score;
-      if (score === null || score < query.minScore) return false;
-    }
     if (q) {
       const { title, description } = extractRdiDisplayData(rdi);
       const haystack = [rdi.id, title, description, ...subjects(rdi), ...extractCollections(rdi.raw), extractRepositoryUrl(rdi.raw)]
@@ -265,11 +257,6 @@ export function searchRdis(query: ListQuery, rdis: Rdi[] = allRdis()): Rdi[] {
   const dir = query.order === "desc" ? -1 : 1;
   const sortKey = query.sort || "id";
   out = [...out].sort((a, b) => {
-    if (sortKey === "score") {
-      const sa = fairnessSummary(a).score ?? -1;
-      const sb = fairnessSummary(b).score ?? -1;
-      return (sa - sb) * dir;
-    }
     const va = sortKey === "title" ? extractRdiDisplayData(a).title : (a.id as string);
     const vb = sortKey === "title" ? extractRdiDisplayData(b).title : (b.id as string);
     return String(va).localeCompare(String(vb)) * dir;
